@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <meta charset="UTF-8">
+    <title>게시글 상세 페이지</title>
+    <py-env>
+        - numpy
+        - cv2
+<!--        - sys-->
+<!--        - os-->
+    </py-env>
+</head>
+<body>
+
+<py-script>
+print("hello")
+    <!--    import sys-->
+import numpy
+<!--import cv2-->
+    <!--    import os-->
+
+oldx = oldy = -1
+
+def on_mouse(event, x, y, flags, param):
+    global oldx, oldy
+
+    if event == cv2.EVENT_LBUTTONDOWN:
+        oldx, oldy = x, y
+        print('EVENT_LBUTTONDOWN: %d, %d' % (x, y))
+
+    elif event == cv2.EVENT_LBUTTONUP:
+        print('EVENT_LBUTTONUP: %d, %d' % (x, y))
+
+    elif event == cv2.EVENT_MOUSEMOVE:
+        if flags & cv2.EVENT_FLAG_LBUTTON:
+            cv2.line(img, (oldx, oldy), (x, y), (0,0,255), 4)
+            cv2.line(img2, (oldx, oldy), (x, y), (199), 4)
+            cv2.imshow('image', img)
+            oldx, oldy = x, y
+
+
+img = numpy.ones((480, 640, 3), dtype=numpy.uint8) * 255
+img2 = numpy.ones((480, 640, 1), dtype=numpy.uint8) * 255
+cv2.namedWindow('image')
+cv2.setMouseCallback('image', on_mouse, img)
+
+cv2.imshow('image', img)
+cv2.waitKey()
+#import pdb; pdb.set_trace()
+outfile = os.path.join( '/Users/parkminbae/Downloads/pic/result'+ '.numpy')
+numpy.save(outfile, img2)
+#cv2.imwrite('/home/minbae/Desktop/painting/result1.npy',img)
+
+cv2.destroyAllWindows()
+</py-script>
+</body>
+</html>
